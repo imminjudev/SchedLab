@@ -9,9 +9,12 @@ BUILD_DIR = build
 INTERACTIVE_SRC = workloads/interactive_latency.c
 INTERACTIVE_BIN = $(BUILD_DIR)/interactive_latency
 
-.PHONY: all clean env-check interactive-smoke test status
+CPU_BOUND_SRC = workloads/cpu_bound.c
+CPU_BOUND_BIN = $(BUILD_DIR)/cpu_bound
 
-all: $(INTERACTIVE_BIN)
+.PHONY: all clean env-check interactive-smoke contention-smoke test status
+
+all: $(INTERACTIVE_BIN) $(CPU_BOUND_BIN)
 
 $(BUILD_DIR):
 >mkdir -p $(BUILD_DIR)
@@ -19,13 +22,19 @@ $(BUILD_DIR):
 $(INTERACTIVE_BIN): $(INTERACTIVE_SRC) | $(BUILD_DIR)
 >$(CC) $(CFLAGS) $(INTERACTIVE_SRC) -o $(INTERACTIVE_BIN)
 
+$(CPU_BOUND_BIN): $(CPU_BOUND_SRC) | $(BUILD_DIR)
+>$(CC) $(CFLAGS) $(CPU_BOUND_SRC) -o $(CPU_BOUND_BIN)
+
 env-check:
 >./scripts/check_environment.sh
 
 interactive-smoke: $(INTERACTIVE_BIN)
 >./scripts/smoke_interactive.sh $(INTERACTIVE_BIN)
 
-test: env-check interactive-smoke
+contention-smoke: all
+>./scripts/smoke_contention.sh
+
+test: env-check interactive-smoke contention-smoke
 
 clean:
 >rm -rf $(BUILD_DIR)
