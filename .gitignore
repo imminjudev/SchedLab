@@ -1,0 +1,9 @@
+build/
+kernel/
+results/*
+!results/README.md
+__pycache__/
+*.pyc
+*.o
+*.bpf.o
+*.skel.h
