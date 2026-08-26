@@ -49,10 +49,10 @@ Native Linux is preferred for the final accepted latency dataset.
 ## Project Structure
 
 ~~~text
-scheduler/   sched_ext schedulers
+scheduler/   sched_ext scheduler implementations
 workloads/   benchmark workloads
 scripts/     experiment and analysis scripts
 docs/        research documentation
 results/     generated datasets
-kernel/      local WSL kernel image, ignored by Git
+kernel/      local custom WSL kernel image, ignored by Git
 ~~~

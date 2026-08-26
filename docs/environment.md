@@ -1,4 +1,4 @@
-# SchedLab Development Environment
+# Development Environment
 
 ## CPU
 
@@ -17,18 +17,15 @@ WSL2
 Linux 6.18.40.1-microsoft-standard-WSL2+
 ~~~
 
-## Custom Kernel
-
-Source:
+## Kernel Source
 
 ~~~text
 microsoft/WSL2-Linux-Kernel
 branch: linux-msft-wsl-6.18.y
-source commit:
-14794180686c2fb6307fbe359c359bec765249f3
+commit: 14794180686c2fb6307fbe359c359bec765249f3
 ~~~
 
-Verified configuration:
+## Kernel Configuration
 
 ~~~text
 CONFIG_BPF=y
@@ -56,19 +53,12 @@ Git 2.53.0
 The kernel-provided `scx_simple` scheduler was successfully built,
 attached, executed, and detached.
 
-Before execution:
-
 ~~~text
-state=disabled
-nr_rejected=0
-~~~
+state before = disabled
+nr_rejected before = 0
 
-During execution, local and global dispatch counters increased.
+scx_simple = executed successfully
 
-After Ctrl+C:
-
-~~~text
-EXIT: unregistered from user space
-state=disabled
-nr_rejected=0
+state after = disabled
+nr_rejected after = 0
 ~~~

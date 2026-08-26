@@ -12,36 +12,27 @@ scheduler, and what throughput and fairness trade-offs result?
 
 The normal Linux scheduler is the primary baseline.
 
-No sched_ext scheduler is attached.
-
 ### scx_simple
 
-The Linux kernel `scx_simple` example is used as a sched_ext reference
-baseline.
+The Linux kernel `scx_simple` scheduler is the sched_ext reference baseline.
 
 ### SchedLab
 
 SchedLab will implement a custom latency-aware sched_ext scheduler.
 
-The policy will favor interactive sleep/wakeup workloads while maintaining
-progress for CPU-bound tasks.
-
 ## Hypotheses
 
-H1: SchedLab will reduce interactive p99 scheduling latency under CPU
-contention.
+H1: SchedLab will reduce interactive p99 scheduling latency under CPU contention.
 
 H2: Aggressive latency prioritization may reduce CPU-bound throughput.
 
-H3: The latency-throughput trade-off will become larger as contention
-increases.
+H3: The latency-throughput trade-off will become larger as contention increases.
 
-H4: Scheduling policy will affect fairness between interactive and
-CPU-bound tasks.
+H4: Scheduling policy will affect fairness.
 
 ## Workloads
 
-Interactive workers repeatedly execute:
+Interactive workers:
 
 ~~~text
 sleep
@@ -50,19 +41,7 @@ short CPU burst
 sleep
 ~~~
 
-CPU-bound workers execute continuous computation.
-
-## Experimental Factors
-
-~~~text
-scheduler policy
-interactive task count
-CPU-bound worker count
-available CPU count
-interactive period
-CPU burst length
-contention level
-~~~
+CPU-bound workers continuously execute computation.
 
 ## Primary Metric
 
@@ -70,7 +49,7 @@ contention level
 interactive p99 scheduling latency
 ~~~
 
-Additional measurements include:
+Additional measurements:
 
 ~~~text
 p50 latency
@@ -90,7 +69,7 @@ fairness
 2. baseline latency workload
 3. sched_ext instrumentation
 4. custom scheduler implementation
-5. correctness and starvation tests
+5. correctness and starvation testing
 6. experiment automation
 7. frozen experiment matrix
 8. replicated experiment
@@ -100,7 +79,7 @@ fairness
 
 ## Completion Criteria
 
-The research cycle is complete when it contains:
+The project is complete when it contains:
 
 ~~~text
 working custom scheduler
@@ -113,6 +92,3 @@ figures
 technical report
 documented limitations
 ~~~
-
-A mixed or negative performance result is acceptable if the experiment
-explains the observed latency, throughput, and fairness behavior.
