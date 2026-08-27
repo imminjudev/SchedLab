@@ -6,12 +6,17 @@ import subprocess
 
 
 WORKER_COUNTS = [0, 1, 2, 4]
+REPEATS = 5
 
 OUTPUT_ROOT = Path("build/baseline-sweep")
 
 
-def run_case(worker_count):
-    output_dir = OUTPUT_ROOT / f"workers-{worker_count}"
+def run_case(worker_count, repeat):
+    output_dir = (
+        OUTPUT_ROOT
+        / f"workers-{worker_count}"
+        / f"run-{repeat}"
+    )
 
     command = [
         "./scripts/run_contention_case.sh",
@@ -50,8 +55,12 @@ def read_summary(path):
 
     return values
 
-def build_row(worker_count):
-    case_dir = OUTPUT_ROOT / f"workers-{worker_count}"
+def build_row(worker_count, repeat):
+    case_dir = (
+        OUTPUT_ROOT
+        / f"workers-{worker_count}"
+        / f"run-{repeat}"
+    )
 
     latency = read_summary(
         case_dir / "latency_summary.txt"
@@ -63,6 +72,7 @@ def build_row(worker_count):
 
     return {
         "workers": worker_count,
+        "repeat": repeat,
         "mean_ns": latency["mean_ns"],
         "p50_ns": latency["p50_ns"],
         "p95_ns": latency["p95_ns"],
@@ -79,14 +89,19 @@ def write_summary():
     rows = []
 
     for worker_count in WORKER_COUNTS:
-        rows.append(
-            build_row(worker_count)
-        )
+        for repeat in range(REPEATS):
+            rows.append(
+                build_row(
+                    worker_count,
+                    repeat,
+                )
+            )
 
     output_path = OUTPUT_ROOT / "summary.csv"
 
     fieldnames = [
         "workers",
+        "repeat",
         "mean_ns",
         "p50_ns",
         "p95_ns",
@@ -117,11 +132,16 @@ def main():
     )
 
     for worker_count in WORKER_COUNTS:
-        print(
-            f"\n=== workers={worker_count} ==="
-        )
+        for repeat in range(REPEATS):
+            print(
+                f"\n=== workers={worker_count} "
+                f"repeat={repeat} ==="
+            )
 
-        run_case(worker_count)
+            run_case(
+                worker_count,
+                repeat,
+            )
 
     write_summary()
 
